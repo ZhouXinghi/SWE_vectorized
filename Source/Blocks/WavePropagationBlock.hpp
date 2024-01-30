@@ -35,6 +35,7 @@
 #ifdef WITH_SOLVER_HYBRID
 #include "HybridSolver.hpp"
 #elif defined(WITH_SOLVER_FWAVE)
+#include "FWaveSolver_SIMD.hpp"
 #include "FWaveSolver.hpp"
 #elif defined(WITH_SOLVER_AUGRIE)
 #include "AugRieSolver.hpp"
@@ -60,6 +61,9 @@ namespace Blocks {
 #elif defined(WITH_SOLVER_FWAVE)
     //! F-wave Riemann solver
     Solvers::FWaveSolver<RealType> wavePropagationSolver_;
+    Solvers::FWaveSolver_SIMD wavePropagationSolverSIMD_;
+    // Solvers::AugRieSolver<RealType> wavePropagationSolver_;
+    // Solvers::AugRie_SIMD wavePropagationSolver_;
 #elif defined(WITH_SOLVER_AUGRIE)
     //! Approximate Augmented Riemann solver
     Solvers::AugRieSolver<RealType> wavePropagationSolver_;

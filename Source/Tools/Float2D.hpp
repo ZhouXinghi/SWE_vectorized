@@ -114,6 +114,7 @@ namespace Tools {
 
     ~Float2D() {
       if (allocateMemory_) {
+        // printf("deleting: %p %p\n", this, data_);
         delete[] data_;
       }
     }

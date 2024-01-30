@@ -44,6 +44,8 @@
 #include "Tools/Logger.hpp"
 #include "Tools/ProgressBar.hpp"
 #include "Writers/Writer.hpp"
+// #include "Tools/Timer.hpp"
+#include "Tools/Stopwatch.hpp"
 
 #ifndef _MSC_VER
 #pragma float_control(precise, on)
@@ -86,6 +88,10 @@ void exchangeBottomTopGhostLayers(
 );
 
 int main(int argc, char** argv) {
+  Stopwatch timer;
+  double solveTime = 0.0;
+  unsigned long long numberOfSolves = 0;
+
   //! MPI Rank of a process.
   int mpiRank = -1;
   //! Number of MPI processes.
@@ -355,8 +361,10 @@ int main(int argc, char** argv) {
       waveBlock->setGhostLayer();
 
       // Compute numerical flux on each edge
+      timer.start();
       waveBlock->computeNumericalFluxes();
-
+      solveTime += timer.stop();
+      numberOfSolves += 2 * ((numberOfGridCellsX + 1) * numberOfGridCellsY + numberOfGridCellsX * (numberOfGridCellsY + 1));
       // Approximate the maximum time step
       // waveBlock->computeMaxTimeStep();
 
@@ -411,6 +419,9 @@ int main(int argc, char** argv) {
 
   delete waveBlock;
   delete[] checkPoints;
+
+  std::cout << "solve time: " << solveTime << '\n';
+  std::cout << "MS/s: " << numberOfSolves * 1e-6 / solveTime << std::endl;
 
   MPI_Finalize();
 
